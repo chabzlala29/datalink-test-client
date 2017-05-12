@@ -56,23 +56,35 @@ class DeviceList extends Component {
     this.setState({ devices });
   }
 
+  template() {
+    let size = this.state.devices.length;
+
+    if (size > 0) {
+      return (
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              {this.columnNames.map( (column, index) => <th key={index}>{column}</th> )}
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.devices.map( item => <DeviceRow item={item} key={item.id} onDelete={this._deleteDevice.bind(this)} /> )}
+          </tbody>
+        </table>
+      );
+    } else {
+      return (
+        <h3>No Records Found.</h3>
+      )
+    }
+  }
 
   render() {
     return (
       <div className="DeviceList">
         <div className="container">
           <SearchBox onRefresh={this._fetchDevices.bind(this)}/>
-
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                {this.columnNames.map( (column, index) => <th key={index}>{column}</th> )}
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.devices.map( item => <DeviceRow item={item} key={item.id} onDelete={this._deleteDevice.bind(this)} /> )}
-            </tbody>
-          </table>
+          {this.template()}
         </div>
       </div>
     );
