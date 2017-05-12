@@ -52,6 +52,20 @@ class DeviceList extends Component {
     })
   }
 
+  _deleteDevice(device) {
+    jQuery.ajax({
+      method: 'DELETE',
+      url: `/api/v1/devices/${device.id}`
+    })
+
+    const devices = [...this.state.devices];
+    const deviceIndex = devices.indexOf(device)
+    devices.splice(deviceIndex, 1);
+
+    this.setState({ devices });
+  }
+
+
   render() {
     return (
       <div className="DeviceList">
@@ -63,7 +77,7 @@ class DeviceList extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.devices.map( item => <DeviceRow item={item} key={item.id} /> )}
+              {this.state.devices.map( item => <DeviceRow item={item} key={item.id} onDelete={this._deleteDevice.bind(this)} /> )}
             </tbody>
           </table>
         </div>

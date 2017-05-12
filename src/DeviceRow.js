@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 
 class DeviceRow extends Component {
   render() {
@@ -17,8 +18,18 @@ class DeviceRow extends Component {
         <td>{item.device_threshold}</td>
         <td>{item.created_at}</td>
         <td>{item.updated_at}</td>
+        <td>
+          <Button bsSize="xsmall" bsStyle="danger" onClick={this._handleDelete.bind(this)}>Delete</Button>
+        </td>
       </tr>
     );
+  }
+
+  _handleDelete(event) {
+    event.preventDefault();
+    if(confirm('Are you sure?')) {
+      this.props.onDelete(this.props.item);
+    }
   }
 }
 
