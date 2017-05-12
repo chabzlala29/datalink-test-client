@@ -1,27 +1,11 @@
 import React, { Component } from 'react';
 import DeviceRow from './DeviceRow';
 import './DeviceList.css';
-
+import jQuery from 'jquery';
 
 class DeviceList extends Component {
-  constructor() {
-    super();
-
-    this.items = [
-      {
-        id: 1,
-        device_mac: '13123TESTBLA',
-        serial_no: 'BLASER12',
-        color: 'RED',
-        name: 'My Name',
-        description: 'Description',
-        building: 'Building',
-        level: 'GRD FLR',
-        device_threshold: 9,
-        created_at: "10/20/2019",
-        updated_at: "10/20/2019"
-      }
-    ];
+  constructor(props) {
+    super(props);
 
     this.columnNames = [
       'ID',
@@ -36,6 +20,36 @@ class DeviceList extends Component {
       'Created At',
       'Updated At'
     ];
+
+    this.state = {
+      devices: []
+    };
+  }
+
+  componentWillMount() {
+    this._fetchDevices();
+  }
+
+  componentDidMount() {
+    this._timer = setInterval(
+      () => this._fetchDevices(),
+      5000
+    );
+  }
+
+  componentWillUnMount() {
+    clearInterval(this._timer);
+  }
+
+  _fetchDevices() {
+    jQuery.ajax({
+      method: 'GET',
+      url: '/api/v1/devices',
+      accept: 'application/json',
+      success: (devices) => {
+        this.setState({ devices })
+      }
+    })
   }
 
   render() {
@@ -49,7 +63,7 @@ class DeviceList extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.items.map( item => <DeviceRow item={item} key={item.id} /> )}
+              {this.state.devices.map( item => <DeviceRow item={item} key={item.id} /> )}
             </tbody>
           </table>
         </div>
