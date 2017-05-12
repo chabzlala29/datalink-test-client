@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import DeviceList from './DeviceList';
+import DeviceList from './components/DeviceList';
 
 // Styles
 import 'bootstrap/dist/css/bootstrap.css';

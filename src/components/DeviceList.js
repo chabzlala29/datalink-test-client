@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DeviceRow from './DeviceRow';
-import './DeviceList.css';
+import SearchBox from './SearchBox';
+import '../styles/DeviceList.css';
 import jQuery from 'jquery';
 
 class DeviceList extends Component {
@@ -30,22 +31,12 @@ class DeviceList extends Component {
     this._fetchDevices();
   }
 
-  componentDidMount() {
-    this._timer = setInterval(
-      () => this._fetchDevices(),
-      5000
-    );
-  }
-
-  componentWillUnMount() {
-    clearInterval(this._timer);
-  }
-
-  _fetchDevices() {
+  _fetchDevices(query) {
     jQuery.ajax({
       method: 'GET',
       url: '/api/v1/devices',
       accept: 'application/json',
+      data: { q: { name_or_device_mac_cont: query } },
       success: (devices) => {
         this.setState({ devices })
       }
@@ -70,6 +61,8 @@ class DeviceList extends Component {
     return (
       <div className="DeviceList">
         <div className="container">
+          <SearchBox onRefresh={this._fetchDevices.bind(this)}/>
+
           <table className="table table-striped">
             <thead>
               <tr>
